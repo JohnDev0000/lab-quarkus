@@ -8,7 +8,11 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
@@ -37,6 +41,39 @@ class CandidateServiceTest {
         when(repository.findAll()).thenReturn(candidates);
 
         List<Candidate> result = service.findAll();
+
+        verify(repository).findAll();
+        verifyNoMoreInteractions(repository);
+
+        assertEquals(candidates, result);
+    }
+
+    @Test
+    void findById_whenCandidateIsFound_returnsCandidate() {
+        Candidate candidate = Instancio.create(Candidate.class);
+
+        when(repository.findById(candidate.id())).thenReturn(Optional.of(candidate));
+
+        Candidate result = service.findById(candidate.id());
+
+        verify(repository).findById(candidate.id());
+        verifyNoMoreInteractions(repository);
+
+        assertEquals(candidate, result);
+    }
+
+    @Test
+    void findById_whenCandidateIsNotFound_throwsException() {
+        Candidate candidate = Instancio.create(Candidate.class);
+
+        when(repository.findById(candidate.id())).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> {
+            service.findById(candidate.id());
+        });
+
+        verify(repository).findById(candidate.id());
+        verifyNoMoreInteractions(repository);
     }
 
 }
