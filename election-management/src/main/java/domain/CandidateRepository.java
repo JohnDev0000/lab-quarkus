@@ -18,7 +18,6 @@ public interface CandidateRepository {
     }
 
     default Optional<Candidate> findById(String id) {
-        CandidateQuery query = new CandidateQuery.Builder().ids(Set.of(id)).build();
-        return find(query).stream().findFirst();
+        return find(new CandidateQuery.Builder().ids(Set.of(id)).build()).stream().findFirst();
     }
 }

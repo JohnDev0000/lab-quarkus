@@ -19,7 +19,6 @@ public class Candidate {
     @Column(name = "job_title")
     private String jobTitle;
 
-
     public String getId() {
         return id;
     }
@@ -77,7 +76,7 @@ public class Candidate {
     }
 
     public static Candidate fromDomain(domain.Candidate domain) {
-        Candidate entity = new Candidate();
+        var entity = new Candidate();
 
         entity.setId(domain.id());
         entity.setPhoto(domain.photo().orElse(null));
@@ -97,7 +96,6 @@ public class Candidate {
                 getFamilyName(),
                 getEmail(),
                 Optional.ofNullable(getPhone()),
-                Optional.ofNullable(getJobTitle())
-        );
+                Optional.ofNullable(getJobTitle()));
     }
 }

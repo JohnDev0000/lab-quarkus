@@ -11,8 +11,8 @@ public class CandidateService {
         this.repository = repository;
     }
 
-    public void save(Candidate candidate) {
-        repository.save(candidate);
+    public void save(Candidate domain) {
+        repository.save(domain);
     }
 
     public List<Candidate> findAll() {
@@ -22,4 +22,5 @@ public class CandidateService {
     public Candidate findById(String id) {
         return repository.findById(id).orElseThrow();
     }
+
 }

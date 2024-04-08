@@ -7,11 +7,11 @@ import domain.CandidateRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @ApplicationScoped
@@ -27,7 +27,7 @@ public class SQLCandidateRepository implements CandidateRepository {
     public void save(List<Candidate> candidates) {
         candidates.stream()
                 .map(infrastructure.repositories.entities.Candidate::fromDomain)
-                .forEach(entityManager::persist);
+                .forEach(entityManager::merge);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SQLCandidateRepository implements CandidateRepository {
         var cq = cb.createQuery(infrastructure.repositories.entities.Candidate.class);
         var root = cq.from(infrastructure.repositories.entities.Candidate.class);
 
-        //cq.select(root).where(conditions(query, cb, root));
+        cq.select(root).where(conditions(query, cb, root));
 
         return entityManager.createQuery(cq)
                 .getResultStream()
